@@ -46,22 +46,25 @@ public class ArrayQueue<T> implements QueueInterface<T>
         else
         {
             T pushed = queue[indexStart];
-            queue[indexStart]=null;
-            if(!empty())
+            queue[indexStart] = null;
+            size--;
+
+            if (size > 0)
             {
-            indexStart++;
+                if (indexStart == queue.length - 1)
+                {
+                    indexStart = 0;
+                }
+                else
+                {
+                    indexStart++;
+                }
             }
             else
             {
-                indexStart=0;
-                indexEnd=0;
+                indexStart = 0;
+                indexEnd = 0;
             }
-            size--;
-            int quarterOfMemory = (this.queue.length) / 4;
-            if (size < quarterOfMemory)
-            {
-                halfLength();
-            } 
             return pushed;
         }
     }
@@ -75,9 +78,9 @@ public class ArrayQueue<T> implements QueueInterface<T>
             doubleLength();
         }
         queue[indexEnd]=item;
-        if(indexEnd!=queue.length-1&&indexStart!=0)
+        if (indexEnd == queue.length - 1)
         {
-            indexEnd=0;
+            indexEnd = 0;
         }
         else
         {
@@ -114,19 +117,19 @@ public class ArrayQueue<T> implements QueueInterface<T>
         return -1;
     }
 
-    public void doubleLength()
+   public void doubleLength()
     {
-        int length = queue.length;
-        T[] tempArray = (T[]) new Object[length*2];
-        for(int i = indexStart; i<length; i++)
+        int oldLength = queue.length;
+        T[] tempArray = (T[]) new Object[oldLength * 2];
+
+        for (int i = 0; i < size; i++)
         {
-            tempArray[indexStart-i]=this.queue[i];
+            tempArray[i] = queue[(indexStart + i) % oldLength];
         }
-        for(int j = 0; j<indexStart; j++)
-        {
-            tempArray[queue.length-indexStart+j] = queue[j];
-        }
-        this.queue=tempArray; 
+
+        queue = tempArray;
+        indexStart = 0;
+        indexEnd = size;
     }
     public void halfLength()
     {

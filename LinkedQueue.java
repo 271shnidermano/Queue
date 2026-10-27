@@ -48,6 +48,10 @@ public class LinkedQueue<T> implements QueueInterface<T>
             LLNode<T> pushed = top.getLink();
             top.setLink(pushed.getLink());
             size--;
+            if (size == 0)
+            {
+                bottom = top;
+            }
             return pushed.getInfo();
         }
     }
